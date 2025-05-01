@@ -1,6 +1,7 @@
-import ContactForm from './components/ContactForm/ContactForm';
-import SearchBox from './components/SearchBox/SearchhBox';
-import ContactList from './components/ContactList/ContactList';
+import css from './App.module.css';
+import ContactForm from '../ContactForm/ContactForm';
+import SearchBox from '../SearchBox/SearchBox';
+import ContactList from '../ContactList/ContactList';
 import { useState, useMemo } from 'react';
 import { useDebounce } from 'use-debounce';
 
@@ -16,6 +17,12 @@ export default function App() {
   const [inputValue, setInputValue] = useState('');
   const [debounceInputValue] = useDebounce(inputValue, 300);
 
+  const addNewContact = (newContact) => {
+    setInitialContacts((prevContacts) => {
+      return [...prevContacts, newContact];
+    });
+  };
+
   const filterContact = useMemo(() => {
     return contacts.filter((contact) =>
       contact.name.toLowerCase().includes(debounceInputValue.toLowerCase()),
@@ -23,9 +30,9 @@ export default function App() {
   }, [debounceInputValue, contacts]);
 
   return (
-    <div>
+    <div className={css.container}>
       <h1>Phonebook</h1>
-      {/* <ContactForm /> */}
+      <ContactForm onSubmit={addNewContact} />
       <SearchBox value={inputValue} onChange={setInputValue} />
       <ContactList contactItem={filterContact} />
     </div>
