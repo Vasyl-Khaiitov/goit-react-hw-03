@@ -29,12 +29,18 @@ export default function App() {
     );
   }, [debounceInputValue, contacts]);
 
+  const deleteContacts = (contactId) => {
+    setInitialContacts((prevContacts) => {
+      return prevContacts.filter((contact) => contact.id !== contactId);
+    });
+  };
+
   return (
     <div className={css.container}>
       <h1>Phonebook</h1>
       <ContactForm onSubmit={addNewContact} />
       <SearchBox value={inputValue} onChange={setInputValue} />
-      <ContactList contactItem={filterContact} />
+      <ContactList contactItem={filterContact} onDelete={deleteContacts} />
     </div>
   );
 }

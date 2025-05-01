@@ -3,6 +3,10 @@ import { FaPhone } from 'react-icons/fa6';
 import { MdPerson4 } from 'react-icons/md';
 
 export default function Contact({ name, number, id, onDelete }) {
+  const handleClickDelete = () => {
+    onDelete(id);
+  };
+
   return (
     <>
       <ul>
@@ -15,7 +19,12 @@ export default function Contact({ name, number, id, onDelete }) {
           {number}
         </li>
       </ul>
-      <button className={css.delete_btn} type="button" id={id}>
+      <button
+        className={css.delete_btn}
+        type="button"
+        id={id}
+        onClick={handleClickDelete}
+      >
         Delete
       </button>
     </>
