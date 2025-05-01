@@ -1,7 +1,10 @@
+import ContactForm from './components/ContactForm/ContactForm';
+import SearchBox from './components/SearchBox/SearchhBox';
 import ContactList from './components/ContactList/ContactList';
-// import ContactForm from './components/ContactForm/ContactForm';
+import { useState, useMemo } from 'react';
+import { useDebounce } from 'use-debounce';
 
-const listItem = [
+const initialContacts = [
   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
   { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
   { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
@@ -9,12 +12,22 @@ const listItem = [
 ];
 
 export default function App() {
+  const [contacts, setInitialContacts] = useState(initialContacts);
+  const [inputValue, setInputValue] = useState('');
+  const [debounceInputValue] = useDebounce(inputValue, 300);
+
+  const filterContact = useMemo(() => {
+    return contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(debounceInputValue.toLowerCase()),
+    );
+  }, [debounceInputValue, contacts]);
+
   return (
     <div>
       <h1>Phonebook</h1>
-      {/* <ContactForm />
-      <SearchBox /> */}
-      <ContactList listItem={listItem} />
+      {/* <ContactForm /> */}
+      <SearchBox value={inputValue} onChange={setInputValue} />
+      <ContactList contactItem={filterContact} />
     </div>
   );
 }
