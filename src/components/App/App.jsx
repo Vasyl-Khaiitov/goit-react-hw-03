@@ -2,7 +2,7 @@ import css from './App.module.css';
 import ContactForm from '../ContactForm/ContactForm';
 import SearchBox from '../SearchBox/SearchBox';
 import ContactList from '../ContactList/ContactList';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useDebounce } from 'use-debounce';
 
 const initialContacts = [
@@ -13,7 +13,20 @@ const initialContacts = [
 ];
 
 export default function App() {
-  const [contacts, setInitialContacts] = useState(initialContacts);
+  const [contacts, setInitialContacts] = useState(() => {
+    const savedContacts = window.localStorage.getItem('lastContacts');
+
+    if (savedContacts !== null) {
+      return JSON.parse(savedContacts);
+    } else {
+      return initialContacts;
+    }
+  });
+
+  useEffect(() => {
+    window.localStorage.setItem('lastContacts', JSON.stringify(contacts));
+  }, [contacts]);
+
   const [inputValue, setInputValue] = useState('');
   const [debounceInputValue] = useDebounce(inputValue, 300);
 
